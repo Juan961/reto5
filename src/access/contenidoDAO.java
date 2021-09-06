@@ -119,9 +119,27 @@ public class contenidoDAO {
             return rowsInserted != 0;
             
         } catch (SQLException ex) {
-            System.out.println("Algo salio mal en la insercion" + ex);
+            System.out.println("Algo salio mal en la insercion del contenido" + ex);
         }
         return false;
+    }
+    
+    public void deleteAllContentFromUser(int idUser){
+        boolean pass = false;
+        try {
+            if(conn == null)
+                conn = conexion.getConection();
+            
+            String sql = "DELETE from contenido where usuario_idUsuario = ?;";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, idUser);
+            
+            pass = statement.execute();
+            
+        } catch(SQLException ex){
+            System.out.println("Algo salio mal en la eliminacion de los contenidos " + ex);
+        }
+        
     }
     
 }

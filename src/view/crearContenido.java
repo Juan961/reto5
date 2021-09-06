@@ -43,10 +43,12 @@ public class crearContenido extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 255));
 
+        messageCreateContent.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 14)); // NOI18N
         messageCreateContent.setForeground(new java.awt.Color(255, 255, 255));
         messageCreateContent.setText("Publicación de contenido");
 
         backButton.setText("Volver");
+        backButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         backButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 backButtonMouseClicked(evt);
@@ -58,7 +60,7 @@ public class crearContenido extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(31, 31, 31)
                 .addComponent(messageCreateContent)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(backButton)
@@ -74,16 +76,20 @@ public class crearContenido extends javax.swing.JFrame {
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
+        titleMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         titleMessage.setText("Titulo");
 
+        categoryMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         categoryMessage.setText("Categoria");
 
         categoriaContenido.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ciencia ficción", "Terror", "Acción", "Realista", "Aventura", "Comedia", "Otro" }));
 
+        productionMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         productionMessage.setText("De que se trata");
 
         tipoContenido.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Serie", "Pelicula", "Cortometraje", "Largometraje", "Blog", "Libro", "Otro" }));
 
+        descripcionMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         descripcionMessage.setText("Descripción");
 
         descripcionContenido.setColumns(20);
@@ -91,6 +97,7 @@ public class crearContenido extends javax.swing.JFrame {
         jScrollPane1.setViewportView(descripcionContenido);
 
         publicarContenido.setText("Publicar");
+        publicarContenido.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         publicarContenido.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 publicarContenidoMouseClicked(evt);
@@ -144,7 +151,7 @@ public class crearContenido extends javax.swing.JFrame {
                 .addComponent(descripcionMessage)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(publicarContenido)
                 .addGap(23, 23, 23))
         );
@@ -164,7 +171,7 @@ public class crearContenido extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void publicarContenidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_publicarContenidoMouseClicked
-        // Obtenemos los valores de 
+        // Obtenemos los valores del contenido que quiera dar el usuario
         String titulo = tituloContenido.getText();
         String descripcion = descripcionContenido.getText();
         String categoria = (String) categoriaContenido.getSelectedItem();
@@ -174,6 +181,7 @@ public class crearContenido extends javax.swing.JFrame {
         contenidoModel contentModel = new contenidoModel(titulo, descripcion, categoria, tipo, login.loginUser.getIdUsuario());
         contenidoDAO createContent = new contenidoDAO();
         
+        // Si obtenemos que se modifico la base de datos le mandamos un mensaje al usuario
         boolean pass = createContent.createContent(contentModel);
         
         if(pass){
@@ -184,7 +192,7 @@ public class crearContenido extends javax.swing.JFrame {
             this.setVisible(false);
             
         } else {
-            showMessageDialog(null, "Algo salio mal");
+            showMessageDialog(null, "Algo salio mal en la creacion");
         }
         
         

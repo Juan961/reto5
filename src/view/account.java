@@ -1,7 +1,11 @@
 package view;
 
 import access.usuarioDAO;
+import access.contenidoDAO;
+import access.reseñaDAO;
+import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
+import org.apache.commons.codec.digest.DigestUtils;
 
 public class account extends javax.swing.JFrame {
 
@@ -11,11 +15,22 @@ public class account extends javax.swing.JFrame {
     public account() {
         initComponents();
         this.setLocationRelativeTo(null);
+        // Llenamos los valores de la cuenta de el usuario
         nameUser.setText(login.loginUser.getNombreUsuario());
         emailUser.setText(login.loginUser.getEmailUsuario());
         passwordUser.setText(login.loginUser.getContraseñaUsuario());
         isDirector.setSelected(login.loginUser.isDirectorUsuario() );
         shareEmail.setSelected(login.loginUser.isShareEmail() );
+        
+        System.out.println("Data account");
+        System.out.println("Name: " + login.loginUser.getNombreUsuario());
+        System.out.println("Email: " + login.loginUser.getEmailUsuario());
+        System.out.println("Password: " + login.loginUser.getContraseñaUsuario());
+        System.out.println("Director:" + login.loginUser.isDirectorUsuario());
+        System.out.println("shareEmail: " + login.loginUser.isShareEmail());
+        System.out.println("--------------------------------------------");
+        
+        
     }
 
     /**
@@ -41,6 +56,7 @@ public class account extends javax.swing.JFrame {
         nameMessage = new javax.swing.JLabel();
         emailMessage = new javax.swing.JLabel();
         passwordMessage = new javax.swing.JLabel();
+        logOutButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,12 +65,14 @@ public class account extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(0, 0, 255));
 
         backButton.setText("Volver");
+        backButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         backButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 backButtonMouseClicked(evt);
             }
         });
 
+        accountMessage.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 14)); // NOI18N
         accountMessage.setForeground(new java.awt.Color(255, 255, 255));
         accountMessage.setText("Cuenta");
 
@@ -81,11 +99,14 @@ public class account extends javax.swing.JFrame {
 
         emailUser.setEditable(false);
 
+        isDirector.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         isDirector.setText("¿Eres creador?");
 
+        shareEmail.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         shareEmail.setText("¿Deseas compartir tu email en caso de que alguien te contacte?");
 
         updateUser.setText("Actualizar datos");
+        updateUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         updateUser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 updateUserMouseClicked(evt);
@@ -95,78 +116,98 @@ public class account extends javax.swing.JFrame {
         deleteUser.setBackground(new java.awt.Color(255, 0, 0));
         deleteUser.setForeground(new java.awt.Color(255, 255, 255));
         deleteUser.setText("Eliminar cuenta");
+        deleteUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        deleteUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteUserMouseClicked(evt);
+            }
+        });
 
+        nameMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         nameMessage.setText("Nombre");
 
+        emailMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         emailMessage.setText("Email");
 
+        passwordMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         passwordMessage.setText("Contraseña");
+
+        logOutButton.setText("Cerrar sesión");
+        logOutButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logOutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logOutButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(isDirector)
+                .addGap(458, 458, 458))
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(deleteUser))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(logOutButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteUser)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 335, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(385, 385, 385)
-                                .addComponent(nameMessage))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(367, 367, 367)
-                                .addComponent(isDirector))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(328, 328, 328)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(updateUser)
+                                .addGap(453, 453, 453))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(shareEmail)
+                                .addGap(322, 322, 322))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(passwordMessage)
+                                .addGap(479, 479, 479))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(emailUser, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(passwordUser, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(nameUser)
-                                        .addComponent(emailUser, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(392, 392, 392)
-                                .addComponent(emailMessage))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(376, 376, 376)
-                                .addComponent(passwordMessage))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(261, 261, 261)
-                                .addComponent(shareEmail)))
-                        .addGap(0, 424, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(363, 363, 363)
-                .addComponent(updateUser)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(nameUser, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(410, 410, 410))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(emailMessage)
+                                .addGap(494, 494, 494))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(nameMessage)
+                                .addGap(486, 486, 486))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
+                .addGap(57, 57, 57)
                 .addComponent(nameMessage)
                 .addGap(18, 18, 18)
                 .addComponent(nameUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(emailMessage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(emailUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(passwordMessage)
-                .addGap(14, 14, 14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(passwordUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(isDirector)
                 .addGap(18, 18, 18)
                 .addComponent(shareEmail)
-                .addGap(26, 26, 26)
+                .addGap(33, 33, 33)
                 .addComponent(updateUser)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                .addComponent(deleteUser)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deleteUser)
+                    .addComponent(logOutButton))
                 .addContainerGap())
         );
 
@@ -191,25 +232,72 @@ public class account extends javax.swing.JFrame {
     }//GEN-LAST:event_backButtonMouseClicked
 
     private void updateUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateUserMouseClicked
+        // Obtenemos los valores que el usuario quiera cambiar
         String nombre = nameUser.getText();
-        String contraseña = passwordUser.getText();
-        boolean director = isDirector.isEnabled();
-        boolean share = shareEmail.isEnabled();
+        String contraseña = new String(passwordUser.getPassword());
         
+        boolean director = isDirector.isSelected();
+        boolean share = shareEmail.isSelected();
+        
+        System.out.println("Botones de seleccionado: ");
+        System.out.println(isDirector.isSelected());
+        System.out.println(shareEmail.isSelected());
+        System.out.println("--------------------------------------------");
+        
+        String contraseñaEncriptada = DigestUtils.md5Hex(contraseña);
+        
+        // Creamos el modelo para subir los cambios a la base de datos
         usuarioDAO update = new usuarioDAO();
-        
-        boolean pass = update.updateUser(login.loginUser, nombre, contraseña, director, share);
+        boolean pass = update.updateUser(login.loginUser.getIdUsuario(), nombre, contraseñaEncriptada, director, share);
         
         if(pass){
+            
+            login.loginUser.setNombreUsuario(nombre);
+            login.loginUser.setContraseñaUsuario(contraseña);
+            login.loginUser.setDirectorUsuario(director);
+            login.loginUser.setShareEmail(share);
+                    
             showMessageDialog(null, "El usuario ha sido actualizado");
             contenido contenido = new contenido();
             contenido.setVisible(true);
             this.setVisible(false);
         } else {
-            showMessageDialog(null, "Algo salio mal");
-
+            showMessageDialog(null, "Algo salio mal en la actualizacion");
         }
     }//GEN-LAST:event_updateUserMouseClicked
+
+    private void logOutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutButtonMouseClicked
+
+        login reLogin = new login();
+        reLogin.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_logOutButtonMouseClicked
+
+    private void deleteUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteUserMouseClicked
+        usuarioDAO deleteUser = new usuarioDAO();
+        contenidoDAO deleteContent = new contenidoDAO();
+        reseñaDAO deleteReview = new reseñaDAO();
+        
+        int option = JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar su cuenta y todos sus contenidos?", "Confirmar salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if(option == 0){
+            deleteReview.deleteAllReviewsFromUser(login.loginUser.getIdUsuario());
+            
+            deleteContent.deleteAllContentFromUser(login.loginUser.getIdUsuario());
+            
+            boolean pass = deleteUser.deleteUser(login.loginUser.getIdUsuario());
+            
+            if(pass){
+                showMessageDialog(null, "Usuario y contenidos eliminados exitosamente");
+                register register = new register();
+                register.setVisible(true);
+                this.setVisible(false);
+            } else {
+                 showMessageDialog(null, "Algo salio mal");
+            }
+        }
+        
+    }//GEN-LAST:event_deleteUserMouseClicked
 
     /**
      * @param args the command line arguments
@@ -255,6 +343,7 @@ public class account extends javax.swing.JFrame {
     private javax.swing.JCheckBox isDirector;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton logOutButton;
     private javax.swing.JLabel nameMessage;
     private javax.swing.JTextField nameUser;
     private javax.swing.JLabel passwordMessage;

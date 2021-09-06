@@ -5,17 +5,28 @@ import model.contenidoModel;
 import access.contenidoDAO;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.table.DefaultTableModel;
 
 public class contenido extends javax.swing.JFrame {
     
+    // Creamos una variable publica con la cual sabremos que contenido el usuario quiere observar
     public static contenidoModel feedbackContenido;
+    // Variable para guardar el nombre del autor del contenido que el usuario vea
     public static String nombreAutor;
+    // Creamos un boton el cual aparecera en la tabla de contenidos por cada contenido que encuentre
     JButton btnTable = new JButton("Entrar");
 
     public contenido() {
         initComponents();
+        
+        System.out.println("Data content");
+        System.out.println("Id: " + login.loginUser.getIdUsuario());
+        System.out.println("Name: " + login.loginUser.getNombreUsuario());
+        System.out.println("Email: " + login.loginUser.getEmailUsuario());
+        System.out.println("Password: " + login.loginUser.getContraseñaUsuario());
+        System.out.println("Director:" + login.loginUser.isDirectorUsuario());
+        System.out.println("shareEmail: " + login.loginUser.isShareEmail());
+        System.out.println("--------------------------------------------");
         
         // Ponemos el nombre del usuario como bienvenida
         nombreUsuario.setText(login.loginUser.getNombreUsuario());
@@ -35,6 +46,7 @@ public class contenido extends javax.swing.JFrame {
         // Creamos un modelo de la tabla para modificarla
         DefaultTableModel modelo = (DefaultTableModel) results.getModel();
         
+        // Obtenemos todos los contenidos de la base de datos
         contenidoDAO initialData = new contenidoDAO();
         ArrayList<ArrayList> result = initialData.getAllContent();
         
@@ -74,20 +86,24 @@ public class contenido extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 255));
 
+        contentMessage.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 14)); // NOI18N
         contentMessage.setForeground(new java.awt.Color(255, 255, 255));
         contentMessage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         contentMessage.setText("Contenido recomendado");
 
         createContent.setText("Crear");
+        createContent.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         createContent.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 createContentMouseClicked(evt);
             }
         });
 
+        welcomeMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         welcomeMessage.setForeground(new java.awt.Color(255, 255, 255));
         welcomeMessage.setText("Bienvenido, ");
 
+        nombreUsuario.setFont(new java.awt.Font("Yu Gothic UI", 1, 14)); // NOI18N
         nombreUsuario.setForeground(new java.awt.Color(255, 255, 255));
         nombreUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         nombreUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -103,13 +119,13 @@ public class contenido extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(contentMessage)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 626, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 565, Short.MAX_VALUE)
                 .addComponent(createContent)
                 .addGap(18, 18, 18)
                 .addComponent(welcomeMessage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47))
+                .addComponent(nombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,9 +139,11 @@ public class contenido extends javax.swing.JFrame {
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
+        resultsMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         resultsMessage.setText("Resultados");
 
         filterButton.setText("Buscar");
+        filterButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         filterButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 filterButtonMouseClicked(evt);
@@ -208,7 +226,7 @@ public class contenido extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createContentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createContentMouseClicked
-   
+        
         crearContenido createContent = new crearContenido();
         createContent.setVisible(true);
         this.setVisible(false);
@@ -216,17 +234,20 @@ public class contenido extends javax.swing.JFrame {
     }//GEN-LAST:event_createContentMouseClicked
 
     private void filterButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filterButtonMouseClicked
+        // Creamos un nuevo modelo de la tabla
         DefaultTableModel modelo = (DefaultTableModel) results.getModel();
-
+        
+        // Obtenemos el numero de filas que tiene el modelo para asi borrarlos
         int rowCount = modelo.getRowCount();
-        //Remove rows one by one from the end of the table
         for (int i = rowCount - 1; i >= 0; i--) {
             modelo.removeRow(i);
         }
         
+        // Obtentemos el valor que el usuario quiere buscar
         String filter = filterString.getText();
         contenidoDAO initialData = new contenidoDAO();
         
+        // Si busca con el campo bacio rellena la tabla con todos los contenidos
         if("".equals(filter)){
             ArrayList<ArrayList> result = initialData.getAllContent();
             for(int i = 0; i < result.size(); i++){
@@ -234,8 +255,11 @@ public class contenido extends javax.swing.JFrame {
                 modelo.addRow(new Object[]{row.get(4), row.get(0), row.get(1), row.get(2), row.get(3), btnTable});
             }
         } else {
+            
+            // Hacemos una consulta a la base de datos con la palabra que quiere buscar el usuario
             ArrayList<ArrayList> result = initialData.getFliterContent(filter);
             
+            // Llenamos la tabla con lo que nos devuelva la base de datos, si no encuentra se coloca sin resultados
             if(result.isEmpty()){
                 modelo.addRow(new Object[]{"Sin resultados", "Sin resultados", "Sin resultados", "Sin resultados", "Sin resultados", "Sin resultados"});
             }
@@ -250,10 +274,15 @@ public class contenido extends javax.swing.JFrame {
     }//GEN-LAST:event_filterButtonMouseClicked
 
     private void resultsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resultsMouseClicked
-        int column = results.getColumnModel().getColumnIndexAtX(evt.getX());
+        // Obtenemos la posicion de la columna y fila la cual el usuario dio click
+        int column = results.getColumnModel().getColumnIndexAtX(evt.getX());        
         int row = evt.getY()/results.getRowHeight();
-                
+        
+        
         if(column == 5){
+            // Si la comuna esta en la posicion 5 ( posicion donde estan los botones )
+            // Obtentemos los valores que estan en la misma fila para crear un modelo contenido con los datos de la fila
+            
             DefaultTableModel resultsModel = (DefaultTableModel) results.getModel();
             
             String autor = String.valueOf(resultsModel.getValueAt(row, 0));
@@ -262,19 +291,18 @@ public class contenido extends javax.swing.JFrame {
             String categoria = String.valueOf(resultsModel.getValueAt(row, 3));
             String produccion = String.valueOf(resultsModel.getValueAt(row, 4));
             
+            // Obtenemos el ID del usuario que creo el contenido
             usuarioDAO consultId = new usuarioDAO();
             int id = consultId.getIdUser(titulo, descripcion, categoria, produccion);
             
+            // La variable publica la llenamos con los valores que obtuvimos y asi poder llenar la siguiente pantalla
             feedbackContenido = new contenidoModel(titulo, descripcion, categoria, produccion, id);
             nombreAutor = autor;
                     
             feedback showFeedback = new feedback();
             showFeedback.setVisible(true);
             this.setVisible(false);
-            
 
-        }else{
-            System.out.println("No le dio en un boton");
         }
     }//GEN-LAST:event_resultsMouseClicked
 

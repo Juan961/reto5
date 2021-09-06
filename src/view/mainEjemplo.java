@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
-/**
- *
- * @author garci
- */
 public class mainEjemplo extends javax.swing.JFrame {
 
     /**
@@ -30,18 +21,20 @@ public class mainEjemplo extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        welcomeMessage = new javax.swing.JLabel();
         registerButton = new javax.swing.JButton();
         loginButton = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        registerMessage = new javax.swing.JLabel();
+        loginMessage = new javax.swing.JLabel();
+        infoMessage1 = new javax.swing.JLabel();
+        infoMessage2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cuevana");
-        setPreferredSize(new java.awt.Dimension(1024, 520));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 255));
 
@@ -49,80 +42,59 @@ public class mainEjemplo extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 466, Short.MAX_VALUE)
+            .addGap(0, 440, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Bienvenido");
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 440, 520));
+
+        welcomeMessage.setFont(new java.awt.Font("Microsoft YaHei Light", 1, 36)); // NOI18N
+        welcomeMessage.setText("Bienvenido");
+        jPanel1.add(welcomeMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 100, -1, -1));
 
         registerButton.setText("acá");
         registerButton.setActionCommand("login");
+        registerButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         registerButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 registerButtonMouseClicked(evt);
             }
         });
+        jPanel1.add(registerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 340, -1, -1));
 
         loginButton.setText("acá");
+        loginButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
             }
         });
+        jPanel1.add(loginButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 450, -1, -1));
 
-        jLabel2.setText("Comienza a compartir dando click");
+        registerMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
+        registerMessage.setText("Comienza a compartir dando click");
+        jPanel1.add(registerMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 340, -1, 24));
 
-        jLabel3.setText("Si ya tienes cuenta da click");
+        loginMessage.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 14)); // NOI18N
+        loginMessage.setText("Si ya tienes cuenta da click");
+        jPanel1.add(loginMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 450, -1, 20));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 238, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(loginButton)
-                            .addComponent(registerButton))
-                        .addGap(221, 221, 221))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(184, 184, 184))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(162, 162, 162))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(197, 197, 197))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(140, 140, 140)
-                .addComponent(jLabel1)
-                .addGap(142, 142, 142)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(registerButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(loginButton)
-                .addGap(53, 53, 53))
-        );
+        infoMessage1.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 18)); // NOI18N
+        infoMessage1.setText("Enterate sobre lo que estan realizando los mejores directores del");
+        jPanel1.add(infoMessage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 230, 500, 32));
+
+        infoMessage2.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 18)); // NOI18N
+        infoMessage2.setText("mundo o recibe feedback sobre tu contenido");
+        jPanel1.add(infoMessage2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 270, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,12 +152,14 @@ public class mainEjemplo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel infoMessage1;
+    private javax.swing.JLabel infoMessage2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton loginButton;
+    private javax.swing.JLabel loginMessage;
     private javax.swing.JButton registerButton;
+    private javax.swing.JLabel registerMessage;
+    private javax.swing.JLabel welcomeMessage;
     // End of variables declaration//GEN-END:variables
 }

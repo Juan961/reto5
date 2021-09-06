@@ -13,19 +13,27 @@ public class feedback extends javax.swing.JFrame {
     public feedback() {
         initComponents();
         this.setLocationRelativeTo(null);
+        
+        // Llenamos la pantalla con los valores de la variable publica
         tituloValue.setText(contenido.feedbackContenido.getTituloContenido());
         descripcionValue.setText(contenido.feedbackContenido.getDescripcionContenido());
         categoriaValue.setText(contenido.feedbackContenido.getCategoriaContenido());
         produccionValue.setText(contenido.feedbackContenido.getProduccionContenido());
         autorValue.setText(contenido.nombreAutor);
         
-        calificacionReseña.setPaintTicks(true); //las rayitas que marcan los números
-        calificacionReseña.setMajorTickSpacing(1); // de cuanto en cuanto los números en el slider
+        // Mejoramos el aspecto de la calificacion
+        calificacionReseña.setPaintTicks(true); // Las rayitas que marcan los números
+        calificacionReseña.setMajorTickSpacing(1); // De cuanto en cuanto los números en el slider
         calificacionReseña.setPaintLabels(true);
         
+        // Obtentemos el modelo la tabla donde iran las reseñas
         DefaultTableModel modelo = (DefaultTableModel) tableReviews.getModel();
         contenidoDAO idContent = new contenidoDAO();
+        
+        // Obtenemos el id del contenido con el cual obtenemos las reseñas
         int id = idContent.getIdContent(contenido.feedbackContenido.getTituloContenido(), contenido.feedbackContenido.getDescripcionContenido(), contenido.feedbackContenido.getCategoriaContenido(), contenido.feedbackContenido.getProduccionContenido());
+        
+        // Obtenemos toas las reseñas y las ponemos en la tabla con un for
         reseñaDAO reseña = new reseñaDAO();
         ArrayList<ArrayList> result = reseña.getAllReviews(id);
         
@@ -36,6 +44,31 @@ public class feedback extends javax.swing.JFrame {
                 ArrayList<ArrayList> row = result.get(i);
                 modelo.addRow(new Object[]{row.get(0), row.get(1), row.get(2)});
             }
+        }
+        
+        /* Verificar si el usuario que ve el contenido es el mismo que lo publico */
+        
+        // Accedemos a los valores del contenido para saber quien es el autor mediante el id
+        String titulo = contenido.feedbackContenido.getTituloContenido();
+        String descripcion = contenido.feedbackContenido.getDescripcionContenido();
+        String categoria = contenido.feedbackContenido.getCategoriaContenido();
+        String produccion= contenido.feedbackContenido.getProduccionContenido();
+        
+        // Accedemos al id
+        usuarioDAO usuario = new usuarioDAO();
+        int idUsuarioContenido = usuario.getIdUser(titulo, descripcion, categoria, produccion);
+        
+        if(login.loginUser.getIdUsuario() == idUsuarioContenido){
+            autorValue.setText("Tú");
+            jScrollPanel2.setVisible(false);
+            feedbackUser.setVisible(false);
+            feedbackMessage.setVisible(false);
+            calificacionMessage.setVisible(false);
+            calificacionReseña.setVisible(false);
+            publicarContenido.setVisible(false);
+            contactarAutor.setVisible(false);
+            
+            descripcionValue.setSize(10, 20);
         }
     }
 
@@ -65,21 +98,29 @@ public class feedback extends javax.swing.JFrame {
         categoriaValue = new javax.swing.JLabel();
         produccionValue = new javax.swing.JLabel();
         autorValue = new javax.swing.JLabel();
-        descripcionValue = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableReviews = new javax.swing.JTable();
         calificacionReseña = new javax.swing.JSlider();
         calificacionMessage = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        descripcionValue = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         categoriaContenido.setBackground(new java.awt.Color(255, 255, 255));
+        categoriaContenido.setMinimumSize(new java.awt.Dimension(1024, 520));
+        categoriaContenido.setPreferredSize(new java.awt.Dimension(1024, 520));
+        categoriaContenido.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 255));
+        jPanel2.setPreferredSize(new java.awt.Dimension(1024, 80));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        tituloValue.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 14)); // NOI18N
         tituloValue.setForeground(new java.awt.Color(255, 255, 255));
         tituloValue.setText("Titulo contenido");
+        jPanel2.add(tituloValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, -1, -1));
 
         back.setText("Volver");
         back.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -87,35 +128,25 @@ public class feedback extends javax.swing.JFrame {
                 backMouseClicked(evt);
             }
         });
+        jPanel2.add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 30, -1, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addComponent(tituloValue)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(back)
-                .addGap(27, 27, 27))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tituloValue)
-                    .addComponent(back))
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
+        categoriaContenido.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1024, 80));
 
+        categoriaMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         categoriaMessage.setText("Categoria:");
+        categoriaContenido.add(categoriaMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, -1, 20));
 
+        produccionMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         produccionMessage.setText("Se trata de: ");
+        categoriaContenido.add(produccionMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 90, -1, 20));
 
+        autorMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         autorMessage.setText("Autor: ");
+        categoriaContenido.add(autorMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 90, -1, 20));
 
+        descripcionMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         descripcionMessage.setText("Descripcion");
+        categoriaContenido.add(descripcionMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, -1, -1));
 
         feedbackUser.setColumns(20);
         feedbackUser.setLineWrap(true);
@@ -123,7 +154,11 @@ public class feedback extends javax.swing.JFrame {
         feedbackUser.setAutoscrolls(false);
         jScrollPanel2.setViewportView(feedbackUser);
 
+        categoriaContenido.add(jScrollPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 408, 494, 96));
+
+        feedbackMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         feedbackMessage.setText("Feedback");
+        categoriaContenido.add(feedbackMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 386, -1, -1));
 
         publicarContenido.setText("Publicar");
         publicarContenido.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -131,6 +166,7 @@ public class feedback extends javax.swing.JFrame {
                 publicarContenidoMouseClicked(evt);
             }
         });
+        categoriaContenido.add(publicarContenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 440, -1, -1));
 
         contactarAutor.setText("Contactar");
         contactarAutor.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -138,10 +174,20 @@ public class feedback extends javax.swing.JFrame {
                 contactarAutorMouseClicked(evt);
             }
         });
+        categoriaContenido.add(contactarAutor, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 440, -1, -1));
 
+        comentariosMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         comentariosMessage.setText("Otros comentarios");
+        categoriaContenido.add(comentariosMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 120, -1, -1));
 
-        descripcionValue.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        categoriaValue.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        categoriaContenido.add(categoriaValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 157, 20));
+
+        produccionValue.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        categoriaContenido.add(produccionValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, 130, 20));
+
+        autorValue.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        categoriaContenido.add(autorValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 90, 110, 20));
 
         tableReviews.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -161,122 +207,53 @@ public class feedback extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableReviews);
 
+        categoriaContenido.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(576, 154, 420, 210));
+
         calificacionReseña.setMaximum(5);
+        categoriaContenido.add(calificacionReseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 440, 173, -1));
 
+        calificacionMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         calificacionMessage.setText("Calificación");
+        categoriaContenido.add(calificacionMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 390, -1, -1));
 
-        javax.swing.GroupLayout categoriaContenidoLayout = new javax.swing.GroupLayout(categoriaContenido);
-        categoriaContenido.setLayout(categoriaContenidoLayout);
-        categoriaContenidoLayout.setHorizontalGroup(
-            categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(categoriaContenidoLayout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, categoriaContenidoLayout.createSequentialGroup()
-                        .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
-                            .addComponent(descripcionValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(33, 33, 33)
-                        .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(categoriaContenidoLayout.createSequentialGroup()
-                                .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(calificacionMessage)
-                                    .addComponent(calificacionReseña, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 48, Short.MAX_VALUE)
-                                .addComponent(publicarContenido)
-                                .addGap(53, 53, 53)
-                                .addComponent(contactarAutor))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addGap(20, 20, 20))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, categoriaContenidoLayout.createSequentialGroup()
-                        .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(feedbackMessage)
-                            .addComponent(descripcionMessage)
-                            .addGroup(categoriaContenidoLayout.createSequentialGroup()
-                                .addComponent(categoriaMessage)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(categoriaValue, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(165, 165, 165)
-                                .addComponent(produccionMessage)
-                                .addGap(38, 38, 38)
-                                .addComponent(produccionValue, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
-                        .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(categoriaContenidoLayout.createSequentialGroup()
-                                .addComponent(autorMessage)
-                                .addGap(44, 44, 44)
-                                .addComponent(autorValue, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(comentariosMessage))
-                        .addGap(67, 67, 67))))
-        );
-        categoriaContenidoLayout.setVerticalGroup(
-            categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(categoriaContenidoLayout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(categoriaMessage)
-                    .addComponent(produccionMessage)
-                    .addComponent(autorMessage)
-                    .addComponent(categoriaValue)
-                    .addComponent(produccionValue)
-                    .addComponent(autorValue))
-                .addGap(18, 18, 18)
-                .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(descripcionMessage)
-                    .addComponent(comentariosMessage))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(descripcionValue, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
-                .addGap(22, 22, 22)
-                .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(feedbackMessage)
-                    .addComponent(calificacionMessage))
-                .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(categoriaContenidoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(categoriaContenidoLayout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(calificacionReseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(categoriaContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(publicarContenido)
-                                .addComponent(contactarAutor)))))
-                .addContainerGap())
-        );
+        descripcionValue.setEditable(false);
+        jScrollPane2.setViewportView(descripcionValue);
+
+        categoriaContenido.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, 490, 210));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(categoriaContenido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(categoriaContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 1024, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(categoriaContenido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(categoriaContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void contactarAutorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactarAutorMouseClicked
+        
         reseñaDAO reseña = new reseñaDAO();
         usuarioDAO usuario = new usuarioDAO(); 
         
+        // Accedemos a los valores del contenido para saber quien es el autor mediante el id
         String titulo = contenido.feedbackContenido.getTituloContenido();
         String descripcion = contenido.feedbackContenido.getDescripcionContenido();
         String categoria = contenido.feedbackContenido.getCategoriaContenido();
         String produccion= contenido.feedbackContenido.getProduccionContenido();
         
+        // Accedemos al id
         int idUsuario = usuario.getIdUser(titulo, descripcion, categoria, produccion);
         
+        // Verificamos que el usuario tenga permitido compartir su correo
         boolean pass = usuario.shareEmail(idUsuario);
-        System.out.println(idUsuario);
 
         if(pass){
+            // Obtenemos el correo
            String emailUser = reseña.getContactUser(idUsuario); 
            showMessageDialog(null, "El correo del usuaio es " + emailUser);    
 
@@ -376,11 +353,12 @@ public class feedback extends javax.swing.JFrame {
     private javax.swing.JLabel comentariosMessage;
     private javax.swing.JButton contactarAutor;
     private javax.swing.JLabel descripcionMessage;
-    private javax.swing.JLabel descripcionValue;
+    private javax.swing.JTextPane descripcionValue;
     private javax.swing.JLabel feedbackMessage;
     private javax.swing.JTextArea feedbackUser;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPanel2;
     private javax.swing.JLabel produccionMessage;
     private javax.swing.JLabel produccionValue;

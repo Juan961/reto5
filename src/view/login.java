@@ -2,13 +2,14 @@ package view;
 
 import model.usuarioModel;
 import access.usuarioDAO;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import static javax.swing.JOptionPane.showMessageDialog;
+import org.apache.commons.codec.digest.DigestUtils;
 
 public class login extends javax.swing.JFrame {
-
+    
+    // Creamos una variable publica del modelo del usuario con el cual identificaremos que usuario esta usando la sesion
     public static usuarioModel loginUser;
             
     public login() {
@@ -28,19 +29,20 @@ public class login extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        loginMessage = new javax.swing.JLabel();
+        emailMessage = new javax.swing.JLabel();
         emailUser = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        passwordMessage = new javax.swing.JLabel();
         passwordUser = new javax.swing.JPasswordField();
         loginButton = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        regsiterMessage = new javax.swing.JLabel();
         registerButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login - Cuevana");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 255));
 
@@ -55,80 +57,43 @@ public class login extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jLabel1.setText("Inicia Sesion");
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(558, 0, -1, 520));
 
-        jLabel2.setText("Email");
+        loginMessage.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 36)); // NOI18N
+        loginMessage.setText("Inicia Sesion");
+        jPanel1.add(loginMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, -1, -1));
 
-        jLabel3.setText("Contraseña");
+        emailMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
+        emailMessage.setText("Email");
+        jPanel1.add(emailMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, -1, -1));
+        jPanel1.add(emailUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 152, -1));
+
+        passwordMessage.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
+        passwordMessage.setText("Contraseña");
+        jPanel1.add(passwordMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, -1, -1));
+        jPanel1.add(passwordUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 152, -1));
 
         loginButton.setText("Entrar");
+        loginButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 loginButtonMouseClicked(evt);
             }
         });
+        jPanel1.add(loginButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 330, -1, -1));
 
-        jLabel4.setText("¿No tienes cuenta?");
+        regsiterMessage.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 14)); // NOI18N
+        regsiterMessage.setText("¿No tienes cuenta?");
+        jPanel1.add(regsiterMessage, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 430, -1, -1));
 
         registerButton.setText("Crear");
+        registerButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         registerButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 registerButtonMouseClicked(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(242, 242, 242)
-                            .addComponent(jLabel1))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(149, 149, 149)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(loginButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(passwordUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(emailUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(217, 217, 217)
-                        .addComponent(jLabel4))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(registerButton)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 250, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(147, 147, 147)
-                .addComponent(jLabel1)
-                .addGap(23, 23, 23)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(emailUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(passwordUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(loginButton)
-                .addGap(68, 68, 68)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(registerButton)
-                .addContainerGap(81, Short.MAX_VALUE))
-        );
+        jPanel1.add(registerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 460, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -151,25 +116,41 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_registerButtonMouseClicked
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
+        // Obtenemos los valores de los campos
         String loginEmailUser = emailUser.getText();
-        String loginPasswordUser = passwordUser.getText();
+        String loginPasswordUser = new String(passwordUser.getPassword());
         
-        loginUser = new usuarioModel("", loginEmailUser, loginPasswordUser, false);
+        String loginPasswordEncripted = DigestUtils.md5Hex(loginPasswordUser);
+        
+        // Creamos un modelo de usuario solo con los valores que le pasamos 
+        loginUser = new usuarioModel("", loginEmailUser, loginPasswordEncripted, false);
         usuarioDAO create = new usuarioDAO();
+        
+        // Consultamos si el usuario esta en la base de datos
         boolean pass = create.consultUser(loginUser);
         
         if(pass){
+            // Accedemos a todos los valores del usuario que esta iniciando sesion y los agregamos a la variable publica 
             ArrayList<String> data = create.getUser(loginUser);
             
-            boolean director = Integer.parseInt(data.get(3)) >= 1;
-            boolean share = Integer.parseInt(data.get(4)) >= 1;
+            System.out.println("Data login:");
+            System.out.println("Id: " + data.get(0));            
+            System.out.println("Name: " + data.get(1));
+            System.out.println("Email: " + data.get(2));
+            System.out.println("Password: " + data.get(3));
+            System.out.println("Director: " + data.get(4));
+            System.out.println("shareEmail: " + data.get(5));
+
+            System.out.println("--------------------------------------------");
             
             loginUser.setIdUsuario( Integer.parseInt(data.get(0))  );
             loginUser.setNombreUsuario( data.get(1) );
             loginUser.setEmailUsuario( data.get(2) );
-            loginUser.setDirectorUsuario( director );
-            loginUser.setShareEmail( share );
+            loginUser.setContraseñaUsuario(loginPasswordUser);            
+            loginUser.setDirectorUsuario( Integer.parseInt(data.get(4)) == 1 );
+            loginUser.setShareEmail( Integer.parseInt(data.get(5)) == 1 );
             
+            // Cargamos la pantalla principal
             contenido ingreso = new contenido();
             ingreso.setVisible(true);
             this.setVisible(false);
@@ -215,15 +196,15 @@ public class login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel emailMessage;
     private javax.swing.JTextField emailUser;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton loginButton;
+    private javax.swing.JLabel loginMessage;
+    private javax.swing.JLabel passwordMessage;
     private javax.swing.JPasswordField passwordUser;
     private javax.swing.JButton registerButton;
+    private javax.swing.JLabel regsiterMessage;
     // End of variables declaration//GEN-END:variables
 }

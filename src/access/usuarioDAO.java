@@ -120,44 +120,43 @@ public class usuarioDAO {
         return id;
     }
     
-    public boolean deleteUser(usuarioModel user){
+    public boolean deleteUser(int idUsuario){
         boolean pass = false;
         try {
             if(conn == null)
                 conn = conexion.getConection();
-            String sql = "DELETE FROM usuario where nombreUsuario=? AND emailUsuario=? AND contraseñaUsuario=?;";
+            String sql = "DELETE FROM usuario where idUsuario=?;";
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setString(1, user.getNombreUsuario());
-            statement.setString(2, user.getEmailUsuario());
-            statement.setString(3, user.getContraseñaUsuario());
+            statement.setInt(1, idUsuario);
             
-            pass = statement.execute();
+            int rowsUpdate = statement.executeUpdate();
+            System.out.println("Actualizaciones " + rowsUpdate);
+            pass = rowsUpdate != 0;
             
         } catch (SQLException ex) {
             System.out.println("Algo salio mal en la eliminacion del usuario: " + ex);
         }
         return pass;
+        
     }
     
-    public boolean updateUser(usuarioModel user, String newName, String newPassword, boolean newIsDirector, boolean newShareEmail){
+    public boolean updateUser(int idUsuario, String newName, String newPassword, boolean newIsDirector, boolean newShareEmail){
         boolean pass = false;
         try {
             if(conn == null)
                 conn = conexion.getConection();
-            String sql = "UPDATE usuario SET nombreUsuario=? contraseñaUsuario=?, directorUsuario=?,  shareEmailUsuario=? where nombreUsuario=? AND emailUsuario=? AND contraseñaUsuario=?;";
+            String sql = "UPDATE usuario SET nombreUsuario=?, contraseñaUsuario=?, directorUsuario=?,  shareEmailUsuario=? where idUsuario=?";
             PreparedStatement statement = conn.prepareStatement(sql);
             
             statement.setString(1, newName);
             statement.setString(2, newPassword);
             statement.setBoolean(3, newIsDirector);
             statement.setBoolean(4, newShareEmail);
-            statement.setString(5, user.getNombreUsuario());
-            statement.setString(6, user.getEmailUsuario());
-            statement.setString(7, user.getContraseñaUsuario());
+            statement.setInt(5, idUsuario);
 
-            int rowsUpdate = statement.executeUpdate();
-            
+            int rowsUpdate = statement.executeUpdate();            
             pass = rowsUpdate != 0;
+            
         } catch (SQLException ex) {
             System.out.println("Algo salio mal en la actualizacion del usuario: " + ex);
         }

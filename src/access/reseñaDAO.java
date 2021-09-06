@@ -85,6 +85,20 @@ public class reseñaDAO {
         return false;
     }
     
-    
+    public void deleteAllReviewsFromUser(int idUser){
+        try {
+            if(conn == null)
+                conn = conexion.getConection();
+            
+            String sql = "DELETE FROM reseña where usuario_idUsuario = ?;";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, idUser);
+            
+            boolean execute = statement.execute();
+            
+        } catch(SQLException ex) {
+            System.out.println("Algo salio mal en la eliminacion de todas las reseñas del usuario " + ex);
+        }
+    }
 
 }
